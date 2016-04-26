@@ -25,24 +25,19 @@ int main(int argc, char **argv){
 	posiciones_iniciales(p, N);
 	escribe_estado(p,v,N,i);
 
-  
-	// tiempos caracteristicos 
+  	/*
+	// t_char 
 	total_time = calcula_tiempo_total(N);
-	time_step = calcula_time_step(N, epsilon);
+	time_step = calcula_time_step(N);
 	n_steps = (int)(total_time/time_step);
-	fprintf(stderr, "tiempo total: %f time_step: %f n_steps %d\n",total_time, time_step, n_steps);
-
-	//evolucion temporal
-
-	calcula_aceleracion(p, v, a, N, epsilon);
-	kick(p, v, a, N, time_step/2.0);  
+  
+	// t_evol
 	for(i=0;i<n_steps;i++){
-		drift(p, v, a, N, time_step);  
 		calcula_aceleracion(p, v, a, N, epsilon);
-		kick(p, v, a, N, time_step);  
+		actualiza_timestep(p, v, a, N);
 	}
 	escribe_estado(p,v,N,i);
-
+	*/
 	
 	return 0;
 }

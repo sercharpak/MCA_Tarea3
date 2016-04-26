@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <string.h>
 #include "inicial.h"
-#include "temporal.h"
-
+#include "evolve.h"
 /*
   Un programa sencillo para seguir la evolucion
   dinamica de un conjunto de N masas puntuales.
@@ -29,16 +26,20 @@ int main(int argc, char **argv){
   
   // tiempos caracteristicos 
   total_time = calcula_tiempo_total(N);
-  time_step = calcula_time_step(N);
+  time_step = calcula_time_step(N, epsilon);
   n_steps = (int)(total_time/time_step);
-  printf("El tiempo total es: %f , el timestep es: %f y va a iterar %d veces", total_time, time_step, n_steps);
-  /*
+  fprintf(stderr, "tiempo total: %f time_step: %f n_steps %d\n", 
+	  total_time, time_step, n_steps);
   //evolucion temporal
+
+  calcula_aceleracion(p, v, a, N, epsilon);
+  kick(p, v, a, N, time_step/2.0);  
   for(i=0;i<n_steps;i++){
+    drift(p, v, a, N, time_step);  
     calcula_aceleracion(p, v, a, N, epsilon);
-    actualiza_timestep(p, v, a, N);
+    kick(p, v, a, N, time_step);  
   }
-  escribe_estado(p, v,N, i)
-  */
+  escribe_estado(p, v,N, i);
+ 
   return 0;
 }
