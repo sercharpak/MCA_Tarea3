@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "inicial.h"
+<<<<<<< HEAD
 #include "evolve.h"
+=======
+#include "temporal.h"
+>>>>>>> 1899e5ef640b93bb514ab65d1c38d653cdb95f9c
 /*
   Un programa sencillo para seguir la evolucion
   dinamica de un conjunto de N masas puntuales.
@@ -44,9 +48,14 @@ int main(int argc, char **argv){
     calcula_aceleracion(p, v, a, N, epsilon);
     kick(p, v, a, N, time_step);  
   }
+<<<<<<< HEAD
   calcula_energia(p, v, U, K, N);
   escribe_estado(p, v, U, K, N, i);
   
+=======
+  escribe_estado(p, v,N, i);
+ 
+>>>>>>> 1899e5ef640b93bb514ab65d1c38d653cdb95f9c
   return 0;
 }
 
