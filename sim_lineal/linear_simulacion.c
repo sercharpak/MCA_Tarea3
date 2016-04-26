@@ -29,9 +29,11 @@ int main(int argc, char **argv){
   
   // tiempos caracteristicos 
   total_time = calcula_tiempo_total(N);
-  time_step = calcula_time_step(N);
+  time_step = calcula_time_step(N, epsilon);
   n_steps = (int)(total_time/time_step);
-  printf("El tiempo total es: %f , el timestep es: %f y va a iterar %d veces", total_time, time_step, n_steps);
+  fprintf(stderr, "tiempo total: %f time_step: %f n_steps %d\n", 
+	  total_time, time_step, n_steps);
+
   /*
   //evolucion temporal
   for(i=0;i<n_steps;i++){
