@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "omp.h"
 #define PI 3.141592653589793238462643383279502884197
 #define G_GRAV 4.49E-3
 
@@ -44,6 +45,8 @@ void calcula_energia(FLOAT *p, FLOAT *v, FLOAT *U, FLOAT *K, int n){
 void calcula_aceleracion(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT epsilon){
   int i,j,k;
   FLOAT delta, delta_total;
+  omp_set_num_threads(4);
+#pragma omp parallel for
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
       a[i*3 + k] = 0.0;
