@@ -18,7 +18,7 @@ FLOAT calcula_tiempo_total(int n){
 }
 
 FLOAT calcula_time_step(int n, FLOAT epsilon){
-  FLOAT t_dyn; 
+  FLOAT t_dyn;
   FLOAT rho;
   FLOAT R;
   rho = n / (4.0/3.0) / (PI * pow(epsilon, 3));
@@ -58,8 +58,8 @@ void calcula_aceleracion(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT epsilon){
 	  delta_total += pow((p[i*3 + k] - p[j*3 + k]),2);
 	}
 	for(k=0;k<3;k++){
-	  delta = p[i*3 + k] - p[j*3 + k]; 
-	  a[i*3 + k] += -G_GRAV * delta 
+	  delta = p[i*3 + k] - p[j*3 + k];
+	  a[i*3 + k] += -G_GRAV * delta
 	    / pow((delta_total + pow(epsilon,2)), 3.0/2.0);
 	}
       }
@@ -70,12 +70,13 @@ void calcula_aceleracion(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT epsilon){
 
 void  kick(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
   int i,k;
+  #pragma omp parallel for
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
       v[i*3 + k] += a[i*3 + k] * delta_t;
     }
   }
-}  
+}
 
 void  drift(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
   int i,k;
@@ -84,5 +85,4 @@ void  drift(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
       p[i*3 + k] += v[i*3 + k] * delta_t;
     }
   }
-}  
-
+}
