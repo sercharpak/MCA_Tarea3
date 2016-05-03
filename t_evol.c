@@ -70,7 +70,7 @@ void calcula_aceleracion(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT epsilon){
 
 void  kick(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
   int i,k;
-  #pragma omp parallel for
+  #pragma omp parallel for private (k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
       v[i*3 + k] += a[i*3 + k] * delta_t;
@@ -80,6 +80,7 @@ void  kick(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
 
 void  drift(FLOAT *p, FLOAT *v, FLOAT *a, int n, FLOAT delta_t){
   int i,k;
+  #pragma omp parallel for private (k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
       p[i*3 + k] += v[i*3 + k] * delta_t;
