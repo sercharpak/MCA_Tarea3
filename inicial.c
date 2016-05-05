@@ -7,15 +7,16 @@
 #define FLOAT double
 
 
-void recibe_input(int argc, char **argv, int *n, FLOAT *e){
+void recibe_input(int argc, char **argv, int *n, FLOAT *e, int *th){
 	//This function makes sure the amount of parameters is correct
 	//The number of particles and epsilon are stored in pointers
-	if(argc!=3){
-		fprintf(stderr, "Hay un número erroneo de parametros. USAGE: main.x N epsilon\n");
+	if(argc!=4){
+		fprintf(stderr, "Hay un número erroneo de parametros. USAGE: main.x N epsilon threads\n");
 		exit(1);
 	}
 	*n = atoi(argv[1]);
 	*e = atof(argv[2]);
+	*th = atof(argv[3]);
 }
 
 FLOAT *crea_vector(int n){

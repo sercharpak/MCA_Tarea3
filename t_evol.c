@@ -45,10 +45,10 @@ void calcula_energia(double *p, double *v, double *U, double *K, int n){
   }
 }
 
-void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon){
+void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, int th){
   int i,j,k;
   double delta, delta_total;
-
+omp_set_num_threads(th);
 #pragma omp parallel for private(j,k, delta_total, delta)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
@@ -71,8 +71,9 @@ void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon)
 }
 
 
-void  kick(double *p, double *v, double *a, int n, double delta_t){
+void  kick(double *p, double *v, double *a, int n, double delta_t, int th){
   int i,k;
+omp_set_num_threads(th);
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
@@ -81,8 +82,9 @@ void  kick(double *p, double *v, double *a, int n, double delta_t){
   }
 }  
 
-void  drift(double *p, double *v, double *a, int n, double delta_t){
+void  drift(double *p, double *v, double *a, int n, double delta_t, int th){
   int i,k;
+omp_set_num_threads(th);
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){

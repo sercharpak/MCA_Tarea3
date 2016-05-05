@@ -10,7 +10,7 @@
 */
 
 int main(int argc, char **argv){
-	int i=0, N=0;
+	int i=0, N=0, threads=1;
 	double *p=NULL;
 	double *v=NULL;
 	double *a=NULL;
@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 	int n_steps=0;
 
 	/*inicial*/
-	recibe_input(argc, argv, &N, &epsilon);
+	recibe_input(argc, argv, &N, &epsilon, &threads);
  	p = crea_vector(3*N);
 	v = crea_vector(3*N);
 	a = crea_vector(3*N);
@@ -39,12 +39,12 @@ int main(int argc, char **argv){
 
 	//evolucion temporal
 
-	calcula_aceleracion(p, v, a, N, epsilon);
-	kick(p, v, a, N, time_step/2.0);  
+	calcula_aceleracion(p, v, a, N, epsilon, threads);
+	kick(p, v, a, N, time_step/2.0, threads);  
 	for(i=0;i<n_steps;i++){
-		drift(p, v, a, N, time_step);  
-		calcula_aceleracion(p, v, a, N, epsilon);
-		kick(p, v, a, N, time_step);  
+		drift(p, v, a, N, time_step, threads);  
+		calcula_aceleracion(p, v, a, N, epsilon, threads);
+		kick(p, v, a, N, time_step, threads);  
 	}
 	calcula_energia(p, v, U, K, N);
 	escribe_estado(p, v, U, K, N, i);
