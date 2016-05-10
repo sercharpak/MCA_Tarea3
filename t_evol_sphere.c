@@ -26,6 +26,7 @@ double calcula_time_step(int n, double epsilon){
 void calcula_energia(double *p, double *v, double *U, double *K, int n){
   int i, j, k;
   double delta_total;
+#pragma omp parallel for private(k, j, delta_total)
   for(i=0;i<n;i++){
     K[i] = 0.0;
     for(k=0;k<3;k++){
@@ -44,7 +45,7 @@ void calcula_energia(double *p, double *v, double *U, double *K, int n){
   }
 }
 
-void calcula_Rcm(double *p, int n, double *Rcm, int th){
+void calcula_Rcm(double *p, int n, double *Rcm){
   double x=0,y=0,z=0;
   int i=0;
 #pragma omp parallel for
@@ -58,7 +59,7 @@ void calcula_Rcm(double *p, int n, double *Rcm, int th){
   Rcm[2]=z/n;
 }
 
-double calcula_masa(double *p, double r, int n, int th){
+double calcula_masa(double *p, double r, int n){
   int i, count=0;
   double R;
 #pragma omp parallel for private(R)
@@ -72,16 +73,15 @@ double calcula_masa(double *p, double r, int n, int th){
   return count*m;
 }
 
-void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, int th, double *Rcm){
+void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, double *Rcm){
   int i,k;
   double M=0.0;
   double r=0.0;
   double radio;
-  double delta, delta_total;
 #pragma omp parallel for private(r, M, radio, k)
   for(i=0;i<n;i++){
     r=p[i*3 + 0]*p[i*3 + 0] + p[i*3 + 1]*p[i*3 + 1] + p[i*3 + 2]*p[i*3 + 2];
-    M=calcula_masa(p, r, n, th);
+    M=calcula_masa(p, r, n);
     radio=(p[i*3 + 0]-Rcm[0])*(p[i*3 + 0]-Rcm[0]) + (p[i*3 + 1]-Rcm[1])*(p[i*3 + 1]-Rcm[1]) + (p[i*3 + 2]-Rcm[2])*(p[i*3 + 2]-Rcm[2]);
     for(k=0;k<3;k++){
       a[i*3 + k] = -G_GRAV*(p[i*3 + k]-Rcm[k])*M/pow(radio + epsilon*epsilon,1.5);
@@ -90,7 +90,7 @@ void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon,
 }
 
 
-void  kick(double *p, double *v, double *a, int n, double delta_t, int th){
+void  kick(double *p, double *v, double *a, int n, double delta_t){
   int i,k;
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){
@@ -100,7 +100,7 @@ void  kick(double *p, double *v, double *a, int n, double delta_t, int th){
   }
 }  
 
-void  drift(double *p, double *v, double *a, int n, double delta_t, int th){
+void  drift(double *p, double *v, double *a, int n, double delta_t){
   int i,k;
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){

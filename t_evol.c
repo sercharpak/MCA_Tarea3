@@ -1,9 +1,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
 #define PI 3.141592653589793238462643383
 #define G_GRAV 4.49E-3
+#define m 1.0
 
 double calcula_tiempo_total(int n){
   double t_dyn;
@@ -26,6 +26,7 @@ double calcula_time_step(int n, double epsilon){
 void calcula_energia(double *p, double *v, double *U, double *K, int n){
   int i, j, k;
   double delta_total;
+#pragma omp parallel for private(j, k, delta_total)
   for(i=0;i<n;i++){
     K[i] = 0.0;
     for(k=0;k<3;k++){
@@ -44,11 +45,10 @@ void calcula_energia(double *p, double *v, double *U, double *K, int n){
   }
 }
 
-void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, int th){
+void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon){
   int i,j,k;
   double delta, delta_total;
-omp_set_num_threads(th);
-#pragma omp parallel for private(j,k, delta_total, delta)
+#pragma omp parallel for private(j, k, delta_total, delta)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
       a[i*3 + k] = 0.0;
@@ -70,9 +70,8 @@ omp_set_num_threads(th);
 }
 
 
-void  kick(double *p, double *v, double *a, int n, double delta_t, int th){
+void  kick(double *p, double *v, double *a, int n, double delta_t){
   int i,k;
-omp_set_num_threads(th);
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){
@@ -81,9 +80,8 @@ omp_set_num_threads(th);
   }
 }  
 
-void  drift(double *p, double *v, double *a, int n, double delta_t, int th){
+void  drift(double *p, double *v, double *a, int n, double delta_t){
   int i,k;
-omp_set_num_threads(th);
 #pragma omp parallel for private(k)
   for(i=0;i<n;i++){
     for(k=0;k<3;k++){

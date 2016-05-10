@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 #include "inicial.h"
 #include "t_evol.h"
 
@@ -21,6 +22,9 @@ int main(int argc, char **argv){
 
 	/*inicial*/
 	recibe_input(argc, argv, &N, &epsilon, &threads);
+
+	omp_set_num_threads(threads);
+
  	p = crea_vector(3*N);
 	v = crea_vector(3*N);
 	a = crea_vector(3*N);
@@ -39,12 +43,12 @@ int main(int argc, char **argv){
 
 	//evolucion temporal
 
-	calcula_aceleracion(p, v, a, N, epsilon, threads);
-	kick(p, v, a, N, time_step/2.0, threads);  
+	calcula_aceleracion(p, v, a, N, epsilon);
+	kick(p, v, a, N, time_step/2.0);  
 	for(i=0;i<n_steps;i++){
-		drift(p, v, a, N, time_step, threads);  
-		calcula_aceleracion(p, v, a, N, epsilon, threads);
-		kick(p, v, a, N, time_step, threads);  
+		drift(p, v, a, N, time_step);  
+		calcula_aceleracion(p, v, a, N, epsilon);
+		kick(p, v, a, N, time_step);  
 	}
 	calcula_energia(p, v, U, K, N);
 	escribe_estado(p, v, U, K, N, i);

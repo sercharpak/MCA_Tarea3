@@ -36,7 +36,7 @@ int main(int argc, char **argv){
 	posiciones_iniciales(p, N);
 	calcula_energia(p, v, U, K, N);
 	escribe_estado(p, v, U, K, N, i);
-	calcula_Rcm(p, N, Rcm, threads);
+	calcula_Rcm(p, N, Rcm);
   
 	// tiempos caracteristicos 
 	total_time = calcula_tiempo_total(N);
@@ -46,12 +46,12 @@ int main(int argc, char **argv){
 
 	//evolucion temporal
 
-	calcula_aceleracion(p, v, a, N, epsilon, threads, Rcm);
-	kick(p, v, a, N, time_step/2.0, threads);  
+	calcula_aceleracion(p, v, a, N, epsilon, Rcm);
+	kick(p, v, a, N, time_step/2.0);  
 	for(i=0;i<n_steps;i++){
-		drift(p, v, a, N, time_step, threads);  
-		calcula_aceleracion(p, v, a, N, epsilon, threads, Rcm);
-		kick(p, v, a, N, time_step, threads);  
+		drift(p, v, a, N, time_step);  
+		calcula_aceleracion(p, v, a, N, epsilon, Rcm);
+		kick(p, v, a, N, time_step);  
 	}
 	calcula_energia(p, v, U, K, N);
 	escribe_estado(p, v, U, K, N, i);
