@@ -44,27 +44,49 @@ void calcula_energia(double *p, double *v, double *U, double *K, int n){
   }
 }
 
-void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, int th){
-  int i,j,k;
+void calcula_Rcm(double *p, int n, double *Rcm){
+  double x=0,y=0,z=0;
+  int i=0;
+
+  for(i=0;i<n;i++){
+    x+=p[i*3 + 0];
+    y+=p[i*3 + 1];
+    z+=p[i*3 + 2];
+  }
+  Rcm[0]=x/n;
+  Rcm[1]=y/n;
+  Rcm[2]=z/n;
+}
+
+double calcula_masa(double *p, double r, double n){
+  double m=1.0;
+  int i, count=0;
+  double R;
+
+  for(i=0;i<n;i++){
+    R=p[i*3 + 0]*p[i*3 + 0] + p[i*3 + 1]*p[i*3 + 1] + p[i*3 + 2]*p[i*3 + 2];    
+    if(R<=r){
+      count+=1;
+    }
+  }
+
+  return count*m;
+}
+
+void calcula_aceleracion(double *p, double *v, double *a, int n, double epsilon, int th, double *Rcm){
+  int i,k;
+  double M=0.0;
+  double r=0.0;
+  double radio;
   double delta, delta_total;
 omp_set_num_threads(th);
-#pragma omp parallel for private(j,k, delta_total, delta)
+//#pragma omp parallel for private(i, radio)
   for(i=0;i<n;i++){
+    r=p[i*3 + 0]*p[i*3 + 0] + p[i*3 + 1]*p[i*3 + 1] + p[i*3 + 2]*p[i*3 + 2];
+    M=calcula_masa(p, r, n);
+    radio=(p[i*3 + 0]-Rcm[0])*(p[i*3 + 0]-Rcm[0]) + (p[i*3 + 1]-Rcm[1])*(p[i*3 + 1]-Rcm[1]) + (p[i*3 + 2]-Rcm[2])*(p[i*3 + 2]-Rcm[2]);
     for(k=0;k<3;k++){
-      a[i*3 + k] = 0.0;
-    }
-    for(j=0;j<n;j++){
-      if(i!=j){
-	delta_total = 0.0;
-	for(k=0;k<3;k++){
-	  delta_total += pow((p[i*3 + k] - p[j*3 + k]),2);
-	}
-	for(k=0;k<3;k++){
-	  delta = p[i*3 + k] - p[j*3 + k]; 
-	  a[i*3 + k] += -G_GRAV * delta 
-	    / pow((delta_total + pow(epsilon,2)), 3.0/2.0);
-	}
-      }
+      a[i*3 + k] = -G_GRAV*(p[i*3 + k]-Rcm[k])*M/pow(radio + epsilon*epsilon,1.5);
     }
   }
 }

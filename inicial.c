@@ -16,7 +16,7 @@ void recibe_input(int argc, char **argv, int *n, FLOAT *e, int *th){
 	}
 	*n = atoi(argv[1]);
 	*e = atof(argv[2]);
-	*th = atof(argv[3]);
+	*th = atoi(argv[3]);
 }
 
 FLOAT *crea_vector(int n){
