@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 #include "inicial.h"
 #include "t_evol_sphere.h"
 
@@ -23,6 +24,9 @@ int main(int argc, char **argv){
 
 	/*inicial*/
 	recibe_input(argc, argv, &N, &epsilon, &threads);
+	
+	omp_set_num_threads(threads);
+
  	p = crea_vector(3*N);
 	v = crea_vector(3*N);
 	a = crea_vector(3*N);
@@ -32,7 +36,7 @@ int main(int argc, char **argv){
 	posiciones_iniciales(p, N);
 	calcula_energia(p, v, U, K, N);
 	escribe_estado(p, v, U, K, N, i);
-	calcula_Rcm(p, N, Rcm);
+	calcula_Rcm(p, N, Rcm, threads);
   
 	// tiempos caracteristicos 
 	total_time = calcula_tiempo_total(N);
