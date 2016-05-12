@@ -1,7 +1,9 @@
-import sys
+import sys, warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from mcmc import mcmc, model
+
+warnings.filterwarnings("ignore")
 
 plt.rc('text', usetex=True, fontsize=24)
 
