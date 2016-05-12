@@ -1,6 +1,7 @@
 import numpy as np 
 
 inicial = np.loadtxt('./state_0_1000.dat')
+#final = np.loadtxt('./state_1581_100.dat')
 final = np.loadtxt('./state_4999_1000.dat')
 
 energia_k_i = np.sum(inicial[:,6])
