@@ -1,6 +1,16 @@
 import numpy as np
+import corner
 
 #FUNCTIONS
+
+#Get best value
+def get_best_value(walk):
+
+    n, b = np.histogram(walk, bins=20)
+    max_hist_id = np.argmax(n)
+    best_value = (b[max_hist_id]+b[max_hist_id+1])/2.0
+
+    return best_value
 
 #Modelo
 def model(x, log_rho_0, log_r_c, alpha, beta):
@@ -54,7 +64,7 @@ def mcmc(x_d, y_d):
 
     #MCMC Loop
 
-    n_steps = 50000
+    n_steps = 60000
 
     for i in range(n_steps):
 
@@ -105,16 +115,25 @@ def mcmc(x_d, y_d):
 
     #Best values
 
-    log_rho_0 = log_rho_0_walk[-1]
-    log_r_c = log_r_c_walk[-1]
-    alpha = alpha_walk[-1]
-    beta = beta_walk[-1]
+    log_rho_0 = get_best_value(log_rho_0_walk[100:])
+    log_r_c = get_best_value(log_r_c_walk[100:])
+    alpha = get_best_value(alpha_walk[100:])
+    beta = get_best_value(beta_walk[100:])
+
 
     #Standard Deviations (discarding first 50 steps)
 
-    log_rho_0_std = np.std(log_rho_0_walk[50:])
-    log_r_c_std = np.std(log_r_c_walk[50:])
-    alpha_std = np.std(alpha_walk[50:])
-    beta_std = np.std(beta_walk[50:])
+    log_rho_0_std = np.std(log_rho_0_walk[100:])
+    log_r_c_std = np.std(log_r_c_walk[100:])
+    alpha_std = np.std(alpha_walk[100:])
+    beta_std = np.std(beta_walk[100:])
+
+    #Corner plot
+
+    samples = np.array([log_rho_0_walk[100:], log_r_c_walk[100:], alpha_walk[100:], beta_walk[100:]])
+    samples = samples.T
+
+    fig = corner.corner(samples, labels=[r"$\log{(\rho_0)}$", r"$\log{(r_c)}$", r"$\alpha$", r"$\beta$"], truths=[log_rho_0, log_r_c, alpha, beta])
+    fig.savefig("corner_plot.png")
 
     return log_rho_0, log_r_c, alpha, beta, log_rho_0_std, log_r_c_std, alpha_std, beta_std
