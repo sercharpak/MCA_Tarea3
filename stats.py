@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 
-files = glob.glob("state_*_100.dat")
+files = glob.glob("state_*_1000.dat")
 n_files = len(files)
 def energy(data):
     E = data[:,6].sum() + data[:,7].sum()
@@ -22,7 +22,7 @@ def radius(data):
 
 
 i_snap = 0
-data_init = np.loadtxt("state_{}_100.dat".format(i_snap))
+data_init = np.loadtxt("state_{}_1000.dat".format(i_snap))
 print data_init
 E_init = energy(data_init)
 r_init = radius(data_init)
@@ -30,8 +30,9 @@ print(E_init)
 
 # time ./a.out 450 0.1
 # time ./a.out 100 0.1
-i_snap = 1581
-data_init = np.loadtxt("state_{}_100.dat".format(i_snap))
+#i_snap = 1581
+i_snap = 4999
+data_init = np.loadtxt("state_{}_1000.dat".format(i_snap))
 E_final = energy(data_init)
 r_final = radius(data_init)
 #print r_final
