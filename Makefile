@@ -1,15 +1,12 @@
-all : state_0_100.dat
+all : state_final_1000.dat
 
 
-state_0_100.dat : main.x
-		./main.x 100 0.1 $(TH)
+state_final_1000.dat : main_sphere.x
+		./main_sphere.x 1000 0.1 $(TH)
 
-main.x : main.c
-		gcc main.c inicial.c t_evol.c -lm -fopenmp -o main.x
-
-main_sphere.x : main_sphere.c t_evol_sphere.c
+main_sphere.x : main_sphere.c t_evol_sphere.c inicial.c
 		gcc main_sphere.c inicial.c t_evol_sphere.c -lm -fopenmp -o main_sphere.x
 
 clean :
-	rm *.x
 	rm state_*
+	rm ./*x
