@@ -25,7 +25,7 @@ if (len(sys.argv) != 2):
 
 n_bodies = int(sys.argv[1])
 
-data_final = np.loadtxt('../state_final_1000.dat'.format(n_bodies))
+data_final = np.loadtxt('../state_final_{}.dat'.format(n_bodies))
 
 #x
 r_final = radius(data_final)

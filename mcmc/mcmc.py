@@ -64,7 +64,7 @@ def mcmc(x_d, y_d):
 
     #MCMC Loop
 
-    n_steps = 70000
+    n_steps = 80000
 
     for i in range(n_steps):
 
